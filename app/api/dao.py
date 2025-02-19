@@ -32,7 +32,8 @@ class ApplicationDAO(BaseDAO):
                         "city_name": app.city.name,
                         "client_name": app.client_name,
                         "contact":app.contact,
-                        "application_text": app.application_text
+                        "application_text": app.application_text,
+                        "application_type": app.application_type
                     }
                     for app in applications
                 ]
@@ -59,7 +60,8 @@ class ApplicationDAO(BaseDAO):
                         "city_name": app.city.name,
                         "client_name": app.client_name,
                         "contact":app.contact,
-                        "application_text": app.application_text
+                        "application_text": app.application_text,
+                        "application_type": app.application_type
                     }
                     for app in applications
                 ]
