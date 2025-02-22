@@ -23,6 +23,11 @@ def back_keyboard() -> ReplyKeyboardMarkup:
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
 
+def register_keyboard() -> ReplyKeyboardMarkup:
+    kb = ReplyKeyboardBuilder()
+    kb.button(text="Поделиться номером телефона", request_contact=True)
+    kb.adjust(1)
+    return kb.as_markup(resize_keyboard=True)
 
 def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
     url_applications = f"{settings.BASE_SITE}/admin?admin_id={user_id}"

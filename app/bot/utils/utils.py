@@ -25,3 +25,4 @@ async def greet_user(message: Message, is_new_user: bool) -> None:
         "Чем я могу помочь вам сегодня?",
         reply_markup=main_keyboard(user_id=message.from_user.id, first_name=message.from_user.first_name)
     )
+
