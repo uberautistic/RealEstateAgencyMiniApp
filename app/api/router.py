@@ -3,7 +3,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from app.api.schemas import ApplicationData
 from app.bot.create_bot import bot
-from app.api.dao import ApplicationDAO
+from app.api.dao import ApplicationDAO, UserDAO
 from app.bot.keyboards.kbs import main_keyboard
 from app.config import settings
 
@@ -54,3 +54,11 @@ async def create_appointment(request: Request):
     await bot.send_message(chat_id=settings.ADMIN_ID, text=admin_message, reply_markup=kb)
 
     return {"message": "success!"}
+
+@router.get("/phone_number", response_class=JSONResponse)
+async def get_phone_number(request: Request, user_id:int=None):
+    # метод для заполнения формы при переходе с начальной странички на страничку формы
+    user = await UserDAO.find_one_or_none(telegram_id=user_id)
+    phone_number = user.phone_number if user else "no user"
+
+    return {"phone_number": phone_number}

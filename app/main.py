@@ -12,6 +12,7 @@ from fastapi import FastAPI, Request
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logging.info("Starting bot setup...")
@@ -34,13 +35,13 @@ app = FastAPI(lifespan=lifespan)
 app.mount('/static', StaticFiles(directory='app/static'), name='static')
 
 
-
 @app.post("/webhook")
 async def webhook(request: Request) -> None:
     logging.info("Received webhook request")
     update = Update.model_validate(await request.json(), context={"bot": bot})
     await dp.feed_update(bot, update)
     logging.info("Update processed")
+
 
 app.include_router(router_pages)
 app.include_router(router_api)

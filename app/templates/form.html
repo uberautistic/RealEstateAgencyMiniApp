@@ -15,7 +15,14 @@
         </div>
         <div class="form-group">
             <label for="phone">Номер телефона</label>
-            <input type="text" id="phone" name="contact" required>
+            <input type="text"
+                   value="{{ phone_number }}"
+                   id="phone"
+                   placeholder="+79999999999"
+                   pattern="^\7\d{3}\d{3}\d{2}\d{2}$"
+                   maxlength="12"
+                   name="contact"
+                   required>
         </div>
         <div class="form-group">
             <label for="city">Город</label>
@@ -29,7 +36,7 @@
         <div class="form-group">
             <label for="applicationType">Тип заявки</label>
             <select id="applicationType" name="application_type" required>
-                <option value="">Выберите тип заявки</option>
+                <option value="" disabled selected>Выберите тип заявки</option>
                 <option value="rent/Снять">Снять</option>
                 <option value="buy/Приобрести">Приобрести</option>
                 <option value="rent_out/Сдать">Сдать</option>
@@ -41,10 +48,9 @@
             <textarea id="applicationText" name="application_text"></textarea>
         </div>
         <input type="hidden" id="user_id" value="{{ user_id }}">
-        <button type="submit">Оставить заявку</button>
+        <button type="submit"> Далее </button>
     </form>
 </div>
-
 <div class="popup" id="successPopup">
     <div class="popup-content">
         <p>Спасибо! В скором времени с вами свяжется наш сотрудник.</p>

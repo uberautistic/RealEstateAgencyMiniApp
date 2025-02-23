@@ -17,13 +17,14 @@ async def read_root(request: Request):
 
 
 @router.get("/form", response_class=HTMLResponse)
-async def read_root(request: Request, user_id: int = None, first_name: str = None):
+async def read_root(request: Request, user_id: int = None, first_name: str = None, phone_number: str = None):
     cities = await CityDAO.find_all()
     context = {
         "request": request,
-        "user_id": user_id,
         "name": first_name,
-        "cities": cities
+        "phone_number": phone_number,
+        "cities": cities,
+        "user_id": user_id
     }
 
     return templates.TemplateResponse("form.html", context)
