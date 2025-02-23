@@ -32,7 +32,9 @@ async def cmd_start(message: Message, state: FSMContext) -> None:
         await message.answer('Привет!\n\nПожалуйста, поделись своим номером телефона '
                              'для завершения регистрации', reply_markup=register_keyboard())
     else:
-        await greet_user(message, is_new_user=not user, phone_number=user.phone_number)
+        await greet_user(message,
+                         is_new_user=not user,
+                         phone_number=user.phone_number)
 
 
 @user_router.message(F.contact)
@@ -47,17 +49,25 @@ async def process_contact(message:Message, state:FSMContext):
             phone_number=message.contact.phone_number  # Сохраняем номер телефона в БД
         )
 
-    await greet_user(message, is_new_user=True, phone_number=user.phone_number)
+    await greet_user(message,
+                     is_new_user=True,
+                     phone_number=user.phone_number)
     await state.set_state(None)
 
 
 @user_router.message(F.text == '🔙 Назад')
 async def cmd_back_home(message: Message) -> None:
-    await greet_user(message, is_new_user=False)
+    user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
+    await greet_user(message,
+                     is_new_user=False,
+                     phone_number=user.phone_number)
 
 
 @user_router.message(F.text == "ℹ️ О нас")
 async def about_us(message: Message):
-    kb = app_keyboard(user_id=message.from_user.id, first_name=message.from_user.first_name)
+    user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
+    kb = app_keyboard(user_id=message.from_user.id,
+                      first_name=message.from_user.first_name,
+                      phone_number=user.phone_number)
     await message.answer(get_about_us_text(), reply_markup=kb)
 

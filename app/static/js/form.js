@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: jsonData
         });
         const result = await response.json();
-        console.log('Response from /form:', result);
+        //console.log('Response from /form:', result);
     } catch(error) {
         console.error('Error sending POST request:', error)
     }
