@@ -7,3 +7,4 @@ jinja2
 pydantic_settings
 alembic
 aiosqlite
+requests

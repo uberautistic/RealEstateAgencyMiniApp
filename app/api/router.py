@@ -1,14 +1,16 @@
+import logging
+import requests
 from fastapi import APIRouter
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from app.api.schemas import ApplicationData
 from app.bot.create_bot import bot
-from app.api.dao import ApplicationDAO, UserDAO
+from app.api.dao import ApplicationDAO, UserDAO, CityDAO
 from app.bot.keyboards.kbs import main_keyboard
 from app.config import settings
 
 router = APIRouter(prefix='/api', tags=['API'])
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @router.post("/application", response_class=JSONResponse)
 async def create_appointment(request: Request):
@@ -48,10 +50,27 @@ async def create_appointment(request: Request):
         application_text=validated_data.application_text,
         application_type=application_type
     )
-    kb = main_keyboard(user_id=validated_data.user_id, first_name=validated_data.name)
+    user = await UserDAO.find_one_or_none(telegram_id=validated_data.user_id)
+    admin = await UserDAO.find_one_or_none(telegram_id=settings.ADMIN_ID)
+    kb = main_keyboard(user_id=validated_data.user_id, first_name=validated_data.name, phone_number=user.phone_number)
+    adminkb = main_keyboard(user_id=admin.telegram_id, first_name=admin.first_name, phone_number=admin.phone_number)
     # отправка сообщений клиенту, админу и боту для уведомлений
     await bot.send_message(chat_id=validated_data.user_id, text=message, reply_markup=kb)
-    await bot.send_message(chat_id=settings.ADMIN_ID, text=admin_message, reply_markup=kb)
+    await bot.send_message(chat_id=settings.ADMIN_ID, text=admin_message, reply_markup=adminkb)
+    try:
+        url =f'{settings.INFOBASE_SITE}/telegram/applications/'
+        headers = {'Content-Type': 'application/json'}
+        data = {
+            'telegram_id': user.telegram_id,
+            'city_name': city_name,
+            'phone_number': validated_data.contact,
+            'application_text':validated_data.application_text,
+            'application_type':application_type
+        }
+        response = requests.post(url=url, headers=headers, json=data)
+        logging.info(f'Код состояния: {response.status_code}, Ответ: {response.json()["response"]}')
+    except Exception as e:
+        logging.error(f'Ошибка: {e}')
 
     return {"message": "success!"}
 

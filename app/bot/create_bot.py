@@ -10,13 +10,13 @@ dp = Dispatcher()
 
 async def start_bot():
     try:
-        await bot.send_message(settings.ADMIN_ID, f'Я запущен🥳.')
+        await bot.send_message(settings.ADMIN_ID, f'Бот запущен.')
     except:
         pass
 
 
 async def stop_bot():
     try:
-        await bot.send_message(settings.ADMIN_ID, 'Бот остановлен. За что?😔')
+        await bot.send_message(settings.ADMIN_ID, 'Бот остановлен.')
     except:
         pass

@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Имя должно быть от 2 до 50 символов');
         return;
     }
-    if(contact.length<12){
+    /*if(contact.length<12){
         alert('Введите номер телефона корректно');
         return;
-    }
+    }*/
     if(city.length<2||city.length>50){
         alert('Город должен быть от 2 до 50 символов');
         return;
