@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Недвижимость</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+<main>
+    <section id="filterSection">
+        <div class="buttons-panel">
+            <button id="filterToggleBtn">Фильтр</button>
+            <button id="requestBtn">Оставить заявку</button>
+        </div>
+
+        <form id="filterForm" method="GET"
+              class="hidden">
+            <div class="filter-group">
+                <label for="city">Город:</label>
+                <select id="city" name="filter_city">
+                    <option value="" disabled selected>Выберите город</option>
+                    {% for city in cities %}
+                    <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="propertyType">Тип недвижимости:</label>
+                <select id="propertyType" name="filter_property_type">
+                    <option value="" disabled selected>Выберите тип недвижимости</option>
+                    {% for type in types %}
+                    <option value="{{ type.id }}">{{ type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="dealType">Купить/Снять:</label>
+                <select id="dealType" name="filter_deal_type">
+                    <option value="" disabled selected>Не важно</option>
+                    <option value="buy">Купить</option>
+                    <option value="rent">Снять</option>
+                </select>
+            </div>
+            <div class="filter-group price-range">
+                <label>Цена:</label>
+                <input type="number" name="price_from" id="priceFrom" placeholder="От" min="0">
+                <input type="number" name="price_to" id="priceTo" placeholder="До" max="9999999">
+            </div>
+            <div class="filter-group area-range">
+                <label>Площадь:</label>
+                <input type="number" name="area_from" id="areaFrom" placeholder="От" min="0">
+                <input type="number" name="area_to" id="areaTo" placeholder="До" max="9999999">
+            </div>
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <button type="submit" id="applyFilterBtn">Применить фильтр</button>
+            <button type="reset" id="clearFieldsBtn">Сбросить</button>
+        </form>
+    </section>
+
+    <section id="propertyListings">
+        {% include 'objects.html' %}
+    </section>
+</main>
+
+<div id="requestModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Оставить заявку</h2>
+        <form id="applicationForm">
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" placeholder="Ваше имя" value="{{ name }}">
+            </div>
+            <div class="form-group">
+                <label for="phone">Номер телефона:</label>
+                <input type="tel" id="phone" placeholder="Ваш телефон" value="{{ phone_number }}" maxlength="12">
+            </div>
+            <div class="form-group">
+                <label for="city_id">Город:</label>
+                <select id="city_id">
+                    <option value="" disabled selected>Выберите город</option>
+                    {% for city in cities %}
+                    <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="applicationType">Тип заявки:</label>
+                <select id="applicationType" required>
+                    <option value="" disabled selected>Выберите тип заявки</option>
+                    <option value="rent">Снять</option>
+                    <option value="buy">Приобрести</option>
+                    <option value="rent_out">Сдать</option>
+                    <option value="sell">Продать</option>
+                    <option value="other">Другое</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="applicationText">Текст заявки:</label>
+                <textarea id="applicationText" placeholder="Ваше сообщение"></textarea>
+            </div>
+            <input type="hidden" id="user_id" value="{{ user_id }}">
+            <button style="width: 100%" type="submit" id="nextBtn">Далее</button>
+        </form>
+    </div>
+</div>
+
+<div id="successModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Заявка успешно отправлена!</h2>
+    </div>
+</div>
+
+<script src="/static/js/home.js" type="module"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</body>
+</html>
+

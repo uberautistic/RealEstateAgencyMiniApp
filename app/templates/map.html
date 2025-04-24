@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU"
+        type="text/javascript"></script>
+
+    <script type="text/javascript">
+        let myMap;
+        ymaps.ready(init);
+        //инициализация карты
+        function init() {
+
+            myMap = new ymaps.Map('map', {
+                center: [55.7558, 37.6176],
+                zoom: 9
+            });
+
+            myMap.controls.remove('searchControl');
+            myMap.controls.remove('geolocationControl');
+            myMap.controls.remove('routeButton');
+            myMap.controls.remove('routePanel');
+            myMap.controls.remove('routeEditor');
+            myMap.controls.remove('trafficControl');
+            myMap.controls.remove('fullscreenControl');
+            myMap.controls.remove('rulerControl');
+            myMap.controls.remove('listBox');
+
+            setPoint({{ object.latitude }}, {{ object.longitude }}, '{{ object.address }}');
+        }
+
+        function setPoint(lat,lng,pointContent){
+            myMap.setCenter([lat,lng],18);
+            var markPreset = 'islands#redIcon';
+
+            var myPlacemark = new ymaps.Placemark([lat, lng], {
+                balloonContent: pointContent
+            }, {
+                preset: markPreset
+            });
+
+            myMap.geoObjects.add(myPlacemark);
+        }
+    </script>
+    <style>
+        #app {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .toolbar {
+            position: absolute;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .toolbar a {
+            padding: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map" style="width: 100%; height: 100%"></div>
+</body>
+
+</html>

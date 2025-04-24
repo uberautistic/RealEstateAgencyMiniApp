@@ -6,9 +6,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 from app.api.dao import UserDAO
-from app.bot.keyboards.kbs import app_keyboard, register_keyboard
-from app.bot.utils.utils import greet_user, get_about_us_text
+from app.bot.kbs import register_keyboard, back_keyboard
+from app.bot.utils import greet_user, get_policy_text
 from app.config import settings
+from app.bot.create_bot import delete_prev_messages, delete_message
 
 user_router = Router()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,27 +21,19 @@ class Form(StatesGroup):
 
 @user_router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext) -> None:
-    # регистрация без номера телефона
-    # user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
-    #
-    # if not user:
-    #     await UserDAO.add(
-    #         telegram_id=message.from_user.id,
-    #         first_name=message.from_user.first_name,
-    #         username=message.from_user.username
-    #     )
-    #
-    # await greet_user(message, is_new_user=not user)
     user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
-
     if not user:
         await state.set_state(Form.waiting_for_phone)
-        await message.answer('Привет!\n\nПожалуйста, поделись своим номером телефона '
-                             'для завершения регистрации', reply_markup=register_keyboard())
+        await message.answer(f'{message.from_user.first_name}, Здравствуйте! '
+                             f'Для завершения регистрации поделитесь своим номером телефона.\n'
+                             f'Предоставляя свой номер телефона вы соглашаетесь с политикой конфиденциальности.',
+                             reply_markup=register_keyboard())
     else:
         await greet_user(message,
                          is_new_user=not user,
                          phone_number=user.phone_number)
+
+    await delete_message(message)
 
 
 @user_router.message(F.contact)
@@ -52,7 +45,7 @@ async def process_contact(message: Message, state: FSMContext):
             telegram_id=message.from_user.id,
             first_name=message.from_user.first_name,
             username=message.from_user.username,
-            phone_number=message.contact.phone_number  # Сохраняем номер телефона в БД
+            phone_number=message.contact.phone_number
         )
         await greet_user(message,
                          is_new_user=True,
@@ -73,19 +66,28 @@ async def process_contact(message: Message, state: FSMContext):
         except Exception as e:
             logging.error(f'Ошибка: {e}')
 
+        await delete_prev_messages(message)
 
-@user_router.message(F.text == '🔙 Назад')
-async def cmd_back_home(message: Message) -> None:
+
+@user_router.message(F.text == 'Назад')
+async def cmd_back(message: Message, state: FSMContext) -> None:
     user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
-    await greet_user(message,
-                     is_new_user=False,
-                     phone_number=user.phone_number)
+    if not user:
+        await state.set_state(Form.waiting_for_phone)
+        await message.answer(f'Для завершения регистрации поделитесь своим номером телефона.'
+                             f'Предоставляя свой номер телефона вы соглашаетесь с политикой конфиденциальности.',
+                             reply_markup=register_keyboard())
+    else:
+        await greet_user(message,
+                         is_new_user=not user,
+                         phone_number=user.phone_number)
+    await delete_prev_messages(message)
 
 
-@user_router.message(F.text == "ℹ️ О нас")
-async def about_us(message: Message):
-    user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
-    kb = app_keyboard(user_id=message.from_user.id,
-                      first_name=message.from_user.first_name,
-                      phone_number=user.phone_number)
-    await message.answer(get_about_us_text(), reply_markup=kb)
+@user_router.message(F.text == "Политика конфиденциальности")
+async def policy(message: Message):
+    kb = back_keyboard()
+    await message.answer(get_policy_text(),reply_markup=kb)
+    await delete_prev_messages(message)
+
+

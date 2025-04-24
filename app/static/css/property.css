@@ -1,0 +1,341 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f8f8; /* Light background */
+    color: #333; /* Dark grey text */
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px; /* Add padding on smaller screens */
+}
+
+/* Header */
+.site-header {
+    background-color: #fff; /* White header */
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #007bff; /* A subtle blue for links */
+    font-size: 1rem;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Sections */
+main section {
+    padding: 30px 0;
+    border-bottom: 1px solid #eee; /* Light separator */
+}
+
+main section:last-child {
+    border-bottom: none;
+}
+
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+/* Carousel */
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative; /* Needed for absolute positioning of track */
+}
+
+.carousel-track {
+    display: flex;
+    width: 100%; /* Will be adjusted by JS */
+    transition: transform 0.3s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%; /* Each item takes full width of container */
+    flex-shrink: 0; /* Prevent shrinking */
+    height: 300px; /* Placeholder height */
+    background-color: #eee; /* Placeholder background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1.2rem;
+    user-select: none; /* Prevent text selection during drag */
+    /* Add styles for actual images when available */
+    /* img { width: 100%; height: 100%; object-fit: cover; } */
+}
+
+.image-placeholder {
+     width: 100%;
+     height: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background-color: #e0e0e0; /* Slightly darker placeholder */
+     color: #555;
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.carousel-pagination {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.pagination-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-dot.active {
+    background-color: #007bff;
+}
+
+
+/* Property Details & Info */
+.property-details-section .property-meta p,
+.property-info dl {
+    margin-bottom: 15px;
+}
+
+.property-info dt {
+    font-weight: bold;
+    margin-bottom: 5px;
+    width: 150px; /* Align dt/dd */
+    float: left; /* Simple alignment */
+    clear: left;
+}
+
+.property-info dd {
+    margin-left: 160px; /* Offset dd from dt */
+    margin-bottom: 5px;
+}
+
+/* Clear float */
+.property-info dl::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Map Container */
+.map-container-placeholder {
+    width: 100%;
+    height: 400px; /* Fixed height for the map container */
+    background-color: #e0e0e0; /* Placeholder background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    overflow: hidden; /* In case a map library adds overflow content */
+}
+
+
+/* Action Button */
+.action-button {
+    display: block;
+    width: 100%; /* Full width button */
+    max-width: 300px; /* Max width on larger screens */
+    margin: 20px auto 0 auto; /* Center button */
+    padding: 15px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    padding-top: 60px; /* Location of the modal content */
+}
+
+.modal-content {
+    background-color: #fefefe; /* White content box */
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; /* Could be more responsive */
+    max-width: 500px; /* Max width for the form */
+    border-radius: 8px;
+    position: relative; /* For close button positioning */
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-top: 0;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.modal-content button[type="submit"] {
+     display: block;
+     width: 100%;
+     padding: 10px;
+     background-color: #28a745; /* Green submit button */
+     color: white;
+     border: none;
+     border-radius: 4px;
+     font-size: 1.1rem;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px; /* More padding on smaller screens */
+    }
+
+    .site-header {
+        padding: 10px 0;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    main section {
+        padding: 20px 0;
+    }
+
+    .property-info dt,
+    .property-info dd {
+        width: auto; /* Remove fixed width */
+        float: none; /* Remove float */
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .property-info dt {
+        margin-bottom: 0; /* Space between term and definition */
+    }
+
+    .map-container-placeholder {
+        height: 300px; /* Slightly less height on mobile */
+    }
+
+    .modal-content {
+        width: 95%; /* Use more screen width on mobile */
+        margin: 20px auto; /* Adjust top margin */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+     .carousel-item {
+        height: 250px; /* Smaller height for images */
+     }
+}
+
+

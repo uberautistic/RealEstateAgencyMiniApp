@@ -2,8 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi.staticfiles import StaticFiles
 from app.bot.create_bot import bot, dp, stop_bot, start_bot
-from app.bot.handlers.user_router import user_router
-from app.bot.handlers.admin_router import admin_router
+from app.bot.user_router import user_router
 from app.pages.router import router as router_pages
 from app.api.router import router as router_api
 from app.config import settings
@@ -17,8 +16,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 async def lifespan(app: FastAPI):
     logging.info("Starting bot setup...")
     dp.include_router(user_router)
-    dp.include_router(admin_router)
-    await start_bot()
+    #await start_bot()
     webhook_url = settings.get_webhook_url()
     await bot.set_webhook(url=webhook_url,
                           allowed_updates=dp.resolve_used_update_types(),
@@ -27,7 +25,7 @@ async def lifespan(app: FastAPI):
     yield
     logging.info("Shutting down bot...")
     await bot.delete_webhook()
-    await stop_bot()
+    #await stop_bot()
     logging.info("Webhook deleted")
 
 

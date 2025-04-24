@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     BASE_SITE: str
     INFOBASE_SITE : str
     ADMIN_ID: int
+    YANDEX_MAPS_API_KEY: str
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")
     )

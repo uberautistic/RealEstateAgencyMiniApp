@@ -1,0 +1,14 @@
+<a href="/object/{{object.id}}?user_id={{ user_id }}">
+    <div class="property-card">
+        <img src="{{object.image}}" alt="Изображение недвижимости">
+        <h3>{{ object.name }}</h3>
+        <div class="location">
+            <p class="city">{{ object.city }},</p>
+            <p class="district">{{ object.district }}</p>
+        </div>
+        <div class="pricing-status">
+            <p class="price">{{ object.price }},</p>
+            <p class="status">{{ object.status }}</p>
+        </div>
+    </div>
+</a>
